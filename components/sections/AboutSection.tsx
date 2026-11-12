@@ -6,16 +6,17 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import {
   Sparkles,
+  Cpu,
+  Box,
   Mail,
   Phone,
   Copy,
   Check,
+  GraduationCap,
   MapPin,
   ArrowUpRight,
-  GraduationCap,
+  ShieldCheck,
   Terminal,
-  Zap,
-  Code2,
 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -42,8 +43,6 @@ function LinkedinIcon({ className = 'w-4 h-4' }: { className?: string }) {
 export default function AboutSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
-  const textContainerRef = useRef<HTMLDivElement | null>(null);
-  const glowRef = useRef<HTMLDivElement | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   const email = 'mohamed.web.contactme@gmail.com';
@@ -58,37 +57,29 @@ export default function AboutSection() {
   useEffect(() => {
     const section = sectionRef.current;
     const card = cardRef.current;
-    const textContainer = textContainerRef.current;
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // 1. Text Scramble & Word-by-Word ScrollTrigger Light-up
-      if (textContainer) {
-        const words = textContainer.querySelectorAll('.reveal-word');
-        gsap.fromTo(
-          words,
-          {
-            color: '#3f3f46', // muted zinc-700
-            opacity: 0.35,
+      // 1. Entrance animation
+      gsap.fromTo(
+        '.gold-reveal',
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.1,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 75%',
           },
-          {
-            color: '#ffffff', // pure radiant white
-            opacity: 1,
-            stagger: 0.04,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: textContainer,
-              start: 'top 80%',
-              end: 'bottom 45%',
-              scrub: 0.7,
-            },
-          }
-        );
-      }
+        }
+      );
 
-      // 2. 3D Holographic Card Mouse Interaction
+      // 2. 3D card tilt
       if (card) {
-        const handleCardMouseMove = (e: MouseEvent) => {
+        const onMouseMove = (e: MouseEvent) => {
           const rect = card.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
@@ -96,150 +87,139 @@ export default function AboutSection() {
           const yPercent = (y / rect.height - 0.5) * 2;
 
           gsap.to(card, {
-            rotateY: xPercent * 14,
-            rotateX: -yPercent * 14,
-            transformPerspective: 1000,
+            rotationY: xPercent * 10,
+            rotationX: -yPercent * 10,
             duration: 0.5,
             ease: 'power2.out',
+            overwrite: 'auto',
           });
-
-          if (glowRef.current) {
-            glowRef.current.style.opacity = '1';
-            glowRef.current.style.transform = `translate(${x - 150}px, ${y - 150}px)`;
-          }
         };
 
-        const handleCardMouseLeave = () => {
+        const onMouseLeave = () => {
           gsap.to(card, {
-            rotateY: 0,
-            rotateX: 0,
-            duration: 0.8,
+            rotationY: 0,
+            rotationX: 0,
+            duration: 0.7,
             ease: 'power3.out',
+            overwrite: 'auto',
           });
-          if (glowRef.current) {
-            glowRef.current.style.opacity = '0';
-          }
         };
 
-        card.addEventListener('mousemove', handleCardMouseMove);
-        card.addEventListener('mouseleave', handleCardMouseLeave);
+        card.addEventListener('mousemove', onMouseMove);
+        card.addEventListener('mouseleave', onMouseLeave);
       }
-
-      // 3. Section Entrance Animation
-      gsap.fromTo(
-        '.about-reveal-item',
-        { y: 60, opacity: 0, filter: 'blur(10px)' },
-        {
-          y: 0,
-          opacity: 1,
-          filter: 'blur(0px)',
-          stagger: 0.12,
-          duration: 1.1,
-          ease: 'power4.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 75%',
-          },
-        }
-      );
     }, section);
 
     return () => ctx.revert();
   }, []);
 
-  const storyParagraph = `I am a Front-End Developer and Creative Technologist driven by an obsession with pixel-perfect visual fidelity, modern architecture, and fluid 3D web experiences. Holding a Bachelor’s Degree in Computer Science, I bridge the gap between technical complexity and cinematic elegance. I craft production-ready applications that aren't just functional, but unforgettable to interact with.`;
-
   return (
     <section
       id="about"
       ref={sectionRef}
-      className="relative w-full min-h-screen bg-[#050508] text-white py-28 md:py-36 px-6 md:px-14 lg:px-24 overflow-hidden flex flex-col justify-center select-none"
+      className="relative w-full min-h-screen bg-[#000000] text-white py-28 md:py-36 px-6 md:px-14 lg:px-24 overflow-hidden select-none border-t border-amber-500/20"
     >
-      {/* Background Ambience & Lighting */}
-      <div className="absolute top-1/3 left-10 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute bottom-20 right-10 w-[650px] h-[650px] bg-indigo-500/5 rounded-full blur-[180px] pointer-events-none" />
+      {/* Golden Horizon Light Bridge from Hero */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent shadow-[0_0_20px_#f59e0b]" />
 
-      {/* Cyber Grid Texture */}
+      {/* Warm Golden Ambient Lighting */}
+      <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-[180px] pointer-events-none" />
+      <div className="absolute bottom-10 left-10 w-[500px] h-[500px] bg-amber-600/5 rounded-full blur-[200px] pointer-events-none" />
+
+      {/* Cyber Luxury Grid Pattern */}
       <div
         className="absolute inset-0 opacity-[0.025] pointer-events-none"
         style={{
           backgroundImage:
-            'linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px)',
-          backgroundSize: '56px 56px',
+            'linear-gradient(rgba(245, 158, 11, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(245, 158, 11, 0.2) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
         }}
       />
 
       <div className="relative z-10 max-w-7xl mx-auto w-full">
-        {/* Overline Tag */}
-        <div className="about-reveal-item flex items-center gap-3 mb-8">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/25 text-cyan-300 font-mono text-xs tracking-[0.2em] uppercase shadow-[0_0_20px_rgba(6,182,212,0.15)]">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-            <span>01 // IDENTITY & PURPOSE</span>
+        {/* ================= SECTION HEADER ================= */}
+        <div className="gold-reveal flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 pb-8 border-b border-amber-500/15">
+          <div>
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 font-mono text-xs tracking-[0.25em] uppercase mb-4 shadow-[0_0_20px_rgba(245,158,11,0.15)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              <span>01 // IDENTITY & ARCHITECTURE</span>
+            </div>
+            <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-none text-white">
+              CRAFTED IN{' '}
+              <span className="bg-gradient-to-r from-amber-100 via-amber-300 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(245,158,11,0.35)]">
+                GOLD & STEEL
+              </span>
+            </h2>
           </div>
-          <span className="h-px w-24 bg-gradient-to-r from-cyan-400/40 to-transparent hidden sm:block" />
+
+          <div className="flex items-center gap-4 text-xs font-mono text-zinc-400">
+            <span className="flex items-center gap-1.5 text-amber-300">
+              <MapPin className="w-3.5 h-3.5 text-amber-400" />
+              Cairo, Egypt • Worldwide
+            </span>
+            <span className="text-zinc-700">//</span>
+            <span className="text-white font-semibold">B.Sc. Computer Science</span>
+          </div>
         </div>
 
-        {/* Cinematic 2-Column Showcase */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-
-          {/* Left Column: 3D Holographic Persona Card (5 cols) */}
-          <div className="about-reveal-item lg:col-span-5 flex justify-center">
+        {/* ================= MAIN SHOWCASE ================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* ================= LEFT: LUXURY GOLD-FRAMED PORTRAIT ================= */}
+          <div className="gold-reveal lg:col-span-5 flex justify-center sticky top-28">
             <div
               ref={cardRef}
-              style={{ transformStyle: 'preserve-3d' }}
-              className="relative w-full max-w-[420px] aspect-[4/5] rounded-[32px] p-2 bg-gradient-to-b from-white/10 via-white/5 to-transparent border border-white/15 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.8)] cursor-pointer group transition-shadow duration-500 hover:shadow-[0_25px_80px_rgba(6,182,212,0.25)] hover:border-cyan-400/50"
+              style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
+              className="relative w-full max-w-[420px] aspect-[4/5] rounded-3xl p-3 bg-gradient-to-b from-amber-500/20 via-white/5 to-transparent border border-amber-500/30 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.9)] hover:border-amber-400/70 transition-all duration-500 group"
             >
-              {/* Inner Card Frame */}
-              <div className="relative w-full h-full rounded-[26px] overflow-hidden bg-[#090a0f]">
-                {/* Photo */}
+              {/* Inner Frame */}
+              <div className="relative w-full h-full rounded-2xl overflow-hidden bg-[#050505]">
+                {/* Natural Color Photo (NO GRAYSCALE, NO BLUR) */}
                 <Image
                   src="/mohamed.JPG"
                   alt="Mohamed Hassan"
                   fill
                   sizes="(max-width: 768px) 100vw, 420px"
                   priority
-                  className="object-cover object-top filter grayscale contrast-110 brightness-95 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
+                  className="object-cover object-top contrast-105 brightness-100 group-hover:scale-105 transition-all duration-700 ease-out"
                 />
 
-                {/* Cyber Scanline Laser Effect */}
-                <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-60">
-                  <div className="w-full h-24 bg-gradient-to-b from-transparent via-cyan-400/20 to-transparent animate-[scan_4s_linear_infinite]" />
-                </div>
+                {/* Subtle Luxury Vignette */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20 pointer-events-none" />
 
-                {/* Dark Vignette Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-black/30 pointer-events-none" />
+                {/* Gold Corner Accents */}
+                <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-amber-400 pointer-events-none" />
+                <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-amber-400 pointer-events-none" />
+                <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-amber-400 pointer-events-none" />
+                <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-amber-400 pointer-events-none" />
 
-                {/* Holographic Cursor Spotlight */}
-                <div
-                  ref={glowRef}
-                  className="absolute w-[300px] h-[300px] rounded-full bg-cyan-400/20 blur-[80px] pointer-events-none opacity-0 transition-opacity duration-300"
-                />
-
-                {/* Top Holographic Tag */}
+                {/* Top Golden Status Tag */}
                 <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-emerald-400 font-mono text-[11px] tracking-wider">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-amber-400/40 text-amber-300 font-mono text-[11px] tracking-wider">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shadow-[0_0_8px_#f59e0b]" />
                     AVAILABLE FOR WORK
                   </span>
 
-                  <span className="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-zinc-400 font-mono text-[10px]">
+                  <span className="px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/10 text-white font-mono text-[10px]">
                     2026 ACTIVE
                   </span>
                 </div>
 
-                {/* Bottom Card Identity Details */}
+                {/* Bottom Identity Plaque */}
                 <div className="absolute bottom-5 left-5 right-5 pointer-events-none">
-                  <div className="p-4 rounded-2xl bg-black/60 backdrop-blur-xl border border-white/10 shadow-xl group-hover:border-cyan-400/30 transition-colors">
-                    <h3 className="text-xl font-black tracking-tight text-white flex items-center gap-2">
+                  <div className="p-4 rounded-xl bg-black/85 backdrop-blur-xl border border-amber-500/30 shadow-2xl">
+                    <h3 className="text-xl font-black tracking-tight text-white flex items-center justify-between">
                       <span>MOHAMED HASSAN</span>
-                      <Sparkles className="w-4 h-4 text-cyan-400" />
+                      <Sparkles className="w-4 h-4 text-amber-400" />
                     </h3>
-                    <p className="text-xs font-mono text-cyan-300 tracking-wide mt-0.5">
-                      Front-End Developer (React / Next.js / TS)
+                    <p className="text-xs font-mono text-amber-300 tracking-wide mt-0.5">
+                      Front-End Developer
                     </p>
-                    <div className="flex items-center gap-1.5 text-[11px] font-mono text-zinc-400 mt-2">
-                      <GraduationCap className="w-3.5 h-3.5 text-indigo-400" />
-                      <span>B.Sc. in Computer Science</span>
+                    <div className="flex items-center justify-between text-[11px] font-mono text-zinc-300 mt-2.5 pt-2 border-t border-white/10">
+                      <span className="flex items-center gap-1 text-white">
+                        <GraduationCap className="w-3.5 h-3.5 text-amber-400" />
+                        B.Sc. Computer Science
+                      </span>
+                      <span className="text-amber-400/80">React • Next.js • 3D</span>
                     </div>
                   </div>
                 </div>
@@ -247,84 +227,120 @@ export default function AboutSection() {
             </div>
           </div>
 
-          {/* Right Column: Kinetic Philosophy & Interactive Core (7 cols) */}
+          {/* ================= RIGHT: ARCHITECTURAL MANIFESTO & 3 PILLARS ================= */}
           <div className="lg:col-span-7 flex flex-col justify-between">
-            {/* Giant Heading */}
-            <div className="about-reveal-item mb-8">
-              <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[0.95] text-white">
-                CRAFTING{' '}
-                <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(6,182,212,0.35)]">
-                  DIGITAL POETRY
+            {/* The Manifesto */}
+            <div className="gold-reveal mb-10">
+              <span className="text-xs font-mono text-amber-400 tracking-[0.25em] uppercase block mb-3 font-semibold">
+                // ARCHITECTURAL PHILOSOPHY
+              </span>
+              <p className="text-lg sm:text-2xl md:text-3xl font-light text-zinc-200 leading-relaxed">
+                I engineer web experiences where{' '}
+                <span className="text-white font-semibold underline decoration-amber-400/60 decoration-2">
+                  aesthetic luxury
+                </span>{' '}
+                meets indestructible{' '}
+                <span className="text-amber-300 font-semibold underline decoration-amber-400/60 decoration-2">
+                  computer science architecture
                 </span>
-                <br />
-                WITH PURE CODE.
-              </h2>
-            </div>
-
-            {/* Locomotive-Style Text Scroll Illumination */}
-            <div
-              ref={textContainerRef}
-              className="about-reveal-item text-lg sm:text-2xl md:text-3xl font-light leading-relaxed mb-10 select-none"
-            >
-              <p>
-                {storyParagraph.split(' ').map((word, idx) => (
-                  <span
-                    key={idx}
-                    className="reveal-word inline-block mr-2 transition-colors duration-200"
-                  >
-                    {word}
-                  </span>
-                ))}
+                . Grounded in a Bachelor&apos;s Degree in Computer Science, every interface I build is fast, scalable, and visually unforgettable.
               </p>
             </div>
 
-            {/* 3 Futuristic Holographic Identity Pillars */}
-            <div className="about-reveal-item grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-cyan-400/40 transition-colors duration-300 backdrop-blur-md">
-                <span className="text-[10px] font-mono text-cyan-400 tracking-widest block uppercase mb-1">
-                  01 // CORE FOCUS
-                </span>
-                <p className="text-xs sm:text-sm font-medium text-zinc-200">
-                  React, Next.js, TypeScript & Three.js 3D
+            {/* The 3 Core Pillars (Strictly Black, Gold, and White) */}
+            <div className="gold-reveal grid grid-cols-1 gap-4 mb-10">
+              {/* Pillar 1 */}
+              <div className="p-5 rounded-2xl bg-[#080808] border border-amber-500/20 hover:border-amber-400/60 transition-all duration-300 backdrop-blur-xl group">
+                <div className="flex items-start justify-between gap-4 mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 group-hover:scale-110 transition-transform">
+                      <Box className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                        Spatial & 3D WebGL Immersion
+                      </h4>
+                      <span className="text-[10px] font-mono tracking-wider uppercase text-amber-400 font-semibold">
+                        KV STUDIO • THREE.JS • VIRTUAL TOURS
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs font-mono text-amber-400/80 px-2 py-0.5 rounded bg-amber-500/10">
+                    01
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-zinc-400 font-light leading-relaxed pl-12">
+                  Developing immersive property exploration features: interactive floor plans, 3D visualization, and virtual tours in Next.js and React.
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-indigo-400/40 transition-colors duration-300 backdrop-blur-md">
-                <span className="text-[10px] font-mono text-indigo-400 tracking-widest block uppercase mb-1">
-                  02 // PHILOSOPHY
-                </span>
-                <p className="text-xs sm:text-sm font-medium text-zinc-200">
-                  Clean Architecture Elevated by Cinematic Motion
+              {/* Pillar 2 */}
+              <div className="p-5 rounded-2xl bg-[#080808] border border-amber-500/20 hover:border-amber-400/60 transition-all duration-300 backdrop-blur-xl group">
+                <div className="flex items-start justify-between gap-4 mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 group-hover:scale-110 transition-transform">
+                      <Cpu className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                        High-Concurrency Microservices
+                      </h4>
+                      <span className="text-[10px] font-mono tracking-wider uppercase text-amber-400 font-semibold">
+                        UNI & DO • EXPRESS • REDUCED RAM LOAD
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs font-mono text-amber-400/80 px-2 py-0.5 rounded bg-amber-500/10">
+                    02
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-zinc-400 font-light leading-relaxed pl-12">
+                  Extracted real-time WebSocket logic into standalone Express microservices, decoupling it from Strapi CMS and drastically reducing server RAM load.
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-emerald-400/40 transition-colors duration-300 backdrop-blur-md">
-                <span className="text-[10px] font-mono text-emerald-400 tracking-widest block uppercase mb-1">
-                  03 // LOCATION
-                </span>
-                <p className="text-xs sm:text-sm font-medium text-zinc-200 flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Cairo, Egypt • Worldwide</span>
+              {/* Pillar 3 */}
+              <div className="p-5 rounded-2xl bg-[#080808] border border-amber-500/20 hover:border-amber-400/60 transition-all duration-300 backdrop-blur-xl group">
+                <div className="flex items-start justify-between gap-4 mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 group-hover:scale-110 transition-transform">
+                      <Sparkles className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                        Motion Physics & Role-Based Security
+                      </h4>
+                      <span className="text-[10px] font-mono tracking-wider uppercase text-amber-400 font-semibold">
+                        TECH-YARD HUB • GSAP • STRICT TYPES
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs font-mono text-amber-400/80 px-2 py-0.5 rounded bg-amber-500/10">
+                    03
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-zinc-400 font-light leading-relaxed pl-12">
+                  Built admin dashboards with role-based access control, automated Excel/Word reporting, and fluid 120fps GSAP kinetic animations.
                 </p>
               </div>
             </div>
 
             {/* Quick Interactive Connect Deck */}
-            <div className="about-reveal-item flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-6 border-t border-white/10">
-              {/* 1-Click Copy Email Pill */}
+            <div className="gold-reveal flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-6 border-t border-amber-500/15">
+              {/* 1-Click Copy Email */}
               <button
                 onClick={copyEmail}
-                className="flex items-center justify-between gap-3 px-5 py-3.5 rounded-xl bg-white/[0.05] hover:bg-cyan-500/10 border border-white/15 hover:border-cyan-400/50 text-xs font-mono text-zinc-200 hover:text-cyan-300 transition-all duration-300 cursor-pointer shadow-lg group"
+                className="flex items-center justify-between gap-3 px-5 py-3.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-400 text-xs font-mono text-amber-200 transition-all cursor-pointer shadow-lg group"
               >
                 <div className="flex items-center gap-2.5 truncate">
-                  <Mail className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <Mail className="w-4 h-4 text-amber-400 shrink-0" />
                   <span className="truncate">{email}</span>
                 </div>
-                <div className="flex items-center gap-1 text-zinc-400 group-hover:text-cyan-300 shrink-0">
+                <div className="flex items-center gap-1 text-zinc-400 group-hover:text-amber-300 shrink-0">
                   {copiedEmail ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      <span className="text-emerald-400">Copied!</span>
+                      <Check className="w-3.5 h-3.5 text-amber-400" />
+                      <span className="text-amber-400 font-bold">Copied!</span>
                     </>
                   ) : (
                     <>
@@ -335,23 +351,23 @@ export default function AboutSection() {
                 </div>
               </button>
 
-              {/* Call Pill */}
+              {/* Call */}
               <a
                 href={`tel:${phone}`}
-                className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-xs font-mono text-zinc-300 transition-colors"
+                className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-mono text-white transition-colors"
               >
-                <Phone className="w-4 h-4 text-emerald-400" />
+                <Phone className="w-4 h-4 text-amber-400" />
                 <span>{phone}</span>
               </a>
 
-              {/* Social Icons */}
+              {/* Social Channels */}
               <div className="flex items-center gap-2">
                 <a
                   href="https://github.com"
                   target="_blank"
                   rel="noreferrer"
-                  title="GitHub Profile"
-                  className="p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-zinc-300 hover:text-white transition-colors"
+                  title="GitHub"
+                  className="p-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-zinc-300 hover:text-white transition-colors"
                 >
                   <GithubIcon className="w-4 h-4" />
                 </a>
@@ -360,16 +376,14 @@ export default function AboutSection() {
                   href="https://linkedin.com"
                   target="_blank"
                   rel="noreferrer"
-                  title="LinkedIn Profile"
-                  className="p-3.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-zinc-300 hover:text-sky-400 transition-colors"
+                  title="LinkedIn"
+                  className="p-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-zinc-300 hover:text-amber-400 transition-colors"
                 >
                   <LinkedinIcon className="w-4 h-4" />
                 </a>
               </div>
             </div>
-
           </div>
-
         </div>
       </div>
     </section>

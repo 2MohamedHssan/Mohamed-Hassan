@@ -47,7 +47,7 @@ function Navbar() {
     duration: 0.3,
     ease: "easeOut",
   }}
-  className="sticky top-0 z-50 w-full bg-[#050508]/80 backdrop-blur-xl border-b border-white/5"
+  className="sticky top-0 z-50 w-full bg-[#000000]/85 backdrop-blur-xl border-b border-amber-500/20 shadow-[0_4px_30px_rgba(0,0,0,0.8)]"
 >
       <div className='flex items-center p-2 overflow-hidden justify-between w-full px-4 container mx-auto'>
         <div className='w-14 h-12 md:w-20 md:h-14 relative '>
