@@ -33,3 +33,14 @@ body {
     transform: translateY(400%);
   }
 }
+
+@keyframes weld-pulse {
+  0%, 100% {
+    opacity: 0.35;
+    filter: drop-shadow(0 0 8px #ff5500);
+  }
+  50% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 18px #ff9900) drop-shadow(0 0 30px #ff3300);
+  }
+}
